@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, nanoid } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-export interface Contact {
+export interface IContact {
 	id?: string;
 	name: string;
 	phoneNumber: string;
@@ -12,7 +12,7 @@ export interface Contact {
 }
 
 interface ContactsState {
-	contacts: Contact[];
+	contacts: IContact[];
 }
 
 const initialState: ContactsState = {
@@ -24,10 +24,10 @@ const contactsSlice = createSlice({
 	initialState,
 	reducers: {
 		contactAdded: {
-			reducer(state, action: PayloadAction<Contact>) {
+			reducer(state, action: PayloadAction<IContact>) {
 				state.contacts.push(action.payload);
 			},
-			prepare(contact: Omit<Contact, "id">) {
+			prepare(contact: Omit<IContact, "id">) {
 				return {
 					payload: {
 						...contact,

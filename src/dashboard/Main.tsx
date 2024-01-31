@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import TableView from "../components/TableView";
 
 const Main = () => {
 	const contacts = useSelector((state: RootState) => state.contacts.contacts);
+	console.log(contacts);
 
 	return (
 		<div>
@@ -10,8 +12,7 @@ const Main = () => {
 				<h1 className="text-2xl font-extrabold">Dashboard</h1>
 				<p>Welcome to Cloud Bank Admin Dashboard</p>
 			</div>
-			<div>
-				<h1>Contacts</h1>
+			{/* <div>
 				<ul>
 					{contacts.map((contact) => (
 						<li key={contact.id}>
@@ -25,6 +26,9 @@ const Main = () => {
 						</li>
 					))}
 				</ul>
+			</div> */}
+			<div className="p-4">
+				{contacts.length > 0 ? <TableView contacts={contacts} /> : <h2 className="text-center text-4xl font-bold "> No Contacts found</h2>}
 			</div>
 		</div>
 	);
