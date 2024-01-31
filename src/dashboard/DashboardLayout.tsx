@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, selectModalState } from "../store/slices/sidebarSlice";
-import { SidebarSection, Nav, Main } from "./index";
+import { SidebarSection, Nav, Main, AddContact } from "./index";
 
 interface SidebarSectionProps {
 	$isOpen: boolean;
@@ -26,6 +26,7 @@ const AdminDashboard = () => {
 					<Routes>
 						<Route index element={<Main />} />
 						<Route path="main" element={<Main />} />
+						<Route path="add-contact" element={<AddContact />} />"
 					</Routes>
 				</MainContent>
 			</ContentContainer>
