@@ -26,7 +26,7 @@ const TableView = ({ contacts }: Props) => {
 							Name
 						</th>
 						<th scope="col" className="py-3 px-6">
-							Phone Number
+							Phone
 						</th>
 						<th scope="col" className="py-3 px-6">
 							Email

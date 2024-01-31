@@ -56,12 +56,13 @@ const Sidebar = styled.div<SidebarSectionProps>`
 	height: 100%;
 	overflow-y: auto;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	background-color: #f7f7f7;
 
 	@media (max-width: 768px) {
 		position: fixed;
 		top: 60px;
 		left: ${({ $isOpen }) => ($isOpen ? "0" : "-250px")};
-		z-index: 1;
+		z-index: 100;
 		transition: left 0.3s ease;
 		width: 250px;
 		background-color: #fff;

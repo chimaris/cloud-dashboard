@@ -5,6 +5,7 @@ import { toggle } from "../store/slices/sidebarSlice";
 import { styled } from "styled-components";
 import { FaHouse } from "react-icons/fa6";
 import { BiPlusCircle } from "react-icons/bi";
+import logo from "../assets/logo.jpeg";
 
 type Name = {
 	name: string;
@@ -27,10 +28,13 @@ const SidebarSection = () => {
 
 	return (
 		<>
-			<h3 style={{ paddingLeft: "20px" }}>Cloud Bank</h3>
+			{/* <h3 style={{ paddingLeft: "20px" }}>Cloud Bank</h3> */}
+
+			<img src={logo} alt="logo" />
+
 			<div style={{ padding: "40px 0" }}>
 				{sidebarNav.map((nav, i) => (
-					<StyledNavLink to={nav.link} key={i} style={({ isActive }) => ({ color: isActive ? "#3538CD" : "" })} onClick={() => dispatch(toggle())}>
+					<StyledNavLink to={nav.link} key={i} style={({ isActive }) => ({ color: isActive ? "#52C0C0" : "" })} onClick={() => dispatch(toggle())}>
 						{nav.icon}
 						{nav.name}
 					</StyledNavLink>
@@ -58,6 +62,6 @@ const StyledNavLink = styled(NavLink)`
 		margin-right: 10px;
 	}
 	&:hover {
-		color: #3538cd;
+		color: #52c0c0;
 	}
 `;
