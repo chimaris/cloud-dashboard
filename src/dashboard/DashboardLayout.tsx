@@ -73,7 +73,7 @@ const Sidebar = styled.div<SidebarSectionProps>`
 const MainContent = styled.div`
 	overflow-y: auto;
 	flex: 1;
-	padding-left: 10px;
+	/* padding-left: 10px; */
 	background-color: #f9fafb;
 
 	@media (max-width: 768px) {

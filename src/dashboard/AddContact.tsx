@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { contactAdded } from "../store/slices/contactSlice";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const maxAddresses = 5; // Maximum number of addresses
+const apiKey = import.meta.env.VITE_APP_GOOGLE_API_KEY as string;
 
 const AddContact = () => {
 	const [contact, setContact] = useState({
@@ -17,11 +20,10 @@ const AddContact = () => {
 
 	const fetchGeolocation = () => {
 		if (!navigator.geolocation) {
-			alert("Geolocation is not supported by your browser");
+			toast.error("Geolocation is not supported by your browser");
 			return;
 		}
-
-		function success(position) {
+		function success(position: Record<string, any>) {
 			const longitude = position.coords.longitude.toFixed(4);
 			const latitude = position.coords.latitude.toFixed(4);
 
@@ -31,11 +33,9 @@ const AddContact = () => {
 				latitude,
 			}));
 		}
-
 		function error() {
-			alert("Unable to retrieve your location");
+			toast.error("Unable to retrieve your location");
 		}
-
 		navigator.geolocation.getCurrentPosition(success, error);
 	};
 
@@ -43,34 +43,69 @@ const AddContact = () => {
 		fetchGeolocation();
 	}, []);
 
+	// Handle input change
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setContact({ ...contact, [name]: value });
 	};
 
+	// Handle address change
 	const handleAddressChange = (index, value) => {
 		const updatedAddresses = [...contact.addresses];
 		updatedAddresses[index] = value;
 		setContact({ ...contact, addresses: updatedAddresses });
 	};
 
+	// Add address field
 	const addAddressField = () => {
 		if (contact.addresses.length < maxAddresses) {
 			setContact({ ...contact, addresses: [...contact.addresses, ""] });
 		}
 	};
 
-	const removeAddressField = (index) => {
+	// Remove address field
+	const removeAddressField = (index: number) => {
 		const updatedAddresses = [...contact.addresses];
 		updatedAddresses.splice(index, 1);
 		setContact({ ...contact, addresses: updatedAddresses });
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	// Get coordinates from Google Maps API
+	const getCoordinates = async (address: string) => {
+		try {
+			console.log("loading....");
+			console.log("Api KEY", apiKey);
 
-		console.log(contact);
+			const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+
+			const response = await axios.get(apiUrl);
+			const data = response.data;
+
+			if (data.status === "OK") {
+				const latitude = data.results[0].geometry.location.lat;
+				const longitude = data.results[0].geometry.location.lng;
+				setContact((prevContact) => ({
+					...prevContact,
+					longitude,
+					latitude,
+				}));
+				return { latitude, longitude };
+			} else {
+				console.log("Error....");
+
+				throw new Error(data.status);
+			}
+		} catch (error) {
+			toast.error("Something happened, couldn't get coordinates");
+			console.error("Error fetching coordinates:", error);
+			return null;
+		}
+	};
+
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
 		dispatch(contactAdded(contact));
+		toast.success("Contact added successfully!");
 	};
 
 	return (
@@ -173,7 +208,7 @@ const AddContact = () => {
 						<input className="border py-2 px-3 text-grey-800" type="text" name="latitude" id="latitude" value={contact.latitude} readOnly />
 					</div>
 					<div className="">
-						<button type="button" className="bg-[#52C0C0] text-white p-2 mt-4">
+						<button type="button" className="bg-[#52C0C0] text-white p-2 mt-4" onClick={() => getCoordinates(contact.addresses[0])}>
 							Get lat & long
 						</button>
 					</div>
