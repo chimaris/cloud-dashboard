@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modalReducer from "./slices/sidebarSlice";
+import contactReducer from "./slices/contactSlice";
 
 export const store = configureStore({
 	reducer: {
 		modal: modalReducer,
+		contacts: contactReducer,
 	},
 });
 
