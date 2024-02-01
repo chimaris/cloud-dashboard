@@ -14,14 +14,16 @@ const AddContact = () => {
 		phoneNumber: "",
 		email: "",
 		addresses: [""],
-		longitude: "0.0000",
-		latitude: "0.0000",
+		longitude: 0.0,
+		latitude: 0.0,
 	});
 	const [errors, setErrors] = useState<IContact>({
 		name: "",
 		phoneNumber: "",
 		email: "",
 		addresses: [],
+		latitude: 0.0,
+		longitude: 0.0,
 	});
 
 	const dispatch = useDispatch();
@@ -125,6 +127,8 @@ const AddContact = () => {
 				phoneNumber: phoneNumberError,
 				email: emailError,
 				addresses: addressesErrors,
+				latitude: 0.0,
+				longitude: 0.0,
 			});
 			return;
 		}
@@ -136,8 +140,8 @@ const AddContact = () => {
 			phoneNumber: "",
 			email: "",
 			addresses: [""],
-			longitude: "0.0000",
-			latitude: "0.0000",
+			longitude: 0.0,
+			latitude: 0.0,
 		});
 	};
 

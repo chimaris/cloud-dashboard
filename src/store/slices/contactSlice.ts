@@ -7,8 +7,8 @@ export interface IContact {
 	phoneNumber: string;
 	email: string;
 	addresses: string[];
-	longitude?: string;
-	latitude?: string;
+	longitude: number;
+	latitude: number;
 }
 
 interface ContactsState {
@@ -21,8 +21,8 @@ const initialState: ContactsState = {
 			addresses: ["23 Main Str. Awka, Anambra", "Another Address", "New Address"],
 			email: "ray@gmail.com",
 			id: "1",
-			latitude: "30.8472",
-			longitude: "5.9746",
+			latitude: 30.8472,
+			longitude: 5.9746,
 			name: "Ray Allen",
 			phoneNumber: "090374838493",
 		},
@@ -30,8 +30,8 @@ const initialState: ContactsState = {
 			addresses: ["23 Main Str. Awka, Anambra", "Another Address", "New Address"],
 			email: "dami@gmail.com",
 			id: "2",
-			latitude: "30.8472",
-			longitude: "30.9746",
+			latitude: 30.8472,
+			longitude: 30.9746,
 			name: "Damilola Babalola",
 			phoneNumber: "08123459349",
 		},

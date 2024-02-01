@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { closeModal, selectModalState } from "../store/slices/sidebarSlice";
+import { useSelector } from "react-redux";
+import { selectModalState } from "../store/slices/sidebarSlice";
 import { SidebarSection, Nav, Main, AddContact } from "./index";
 
 interface SidebarSectionProps {
@@ -9,12 +9,8 @@ interface SidebarSectionProps {
 }
 
 const AdminDashboard = () => {
-	const dispatch = useDispatch();
 	const { isOpen } = useSelector(selectModalState);
 
-	const handleClose = () => {
-		dispatch(closeModal());
-	};
 	return (
 		<DashboardContainer>
 			<ContentContainer>

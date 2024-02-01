@@ -5,7 +5,6 @@ import MapView from "../components/MapView";
 
 const Main = () => {
 	const contacts = useSelector((state: RootState) => state.contacts.contacts);
-	console.log(contacts);
 
 	return (
 		<div>
