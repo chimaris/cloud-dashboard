@@ -225,13 +225,11 @@ const AddContact = () => {
 					</div>
 				))}
 
-				<button
-					type="button"
-					onClick={addAddressField}
-					className="mb-4 bg-[#52C0C0] text-white px-3 py-2 rounded shadow"
-					disabled={contact.addresses.length >= maxAddresses}>
-					Add more
-				</button>
+				{contact.addresses.length < maxAddresses && (
+					<button type="button" onClick={addAddressField} className="mb-4 bg-[#52C0C0] text-white px-3 py-2 rounded shadow">
+						Add more
+					</button>
+				)}
 
 				{/* Longitute and Latitude fields */}
 				<div className="grid grid-cols-2 md:grid-cols-3 items-center gap-2">
