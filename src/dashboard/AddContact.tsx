@@ -59,8 +59,13 @@ const AddContact = () => {
 			toast.success("Longitude and latitude retrieved successfully");
 			dispatch(setLoading(false));
 		}
-		function error() {
-			toast.error("Unable to retrieve your location");
+		function error(err: GeolocationPositionError) {
+			if (err.code === err.PERMISSION_DENIED) {
+				// User denied the request for Geolocation
+				toast.error("You have denied the request for Geolocation. Please enable it to use this feature.");
+			} else {
+				toast.error("Unable to retrieve your location");
+			}
 			dispatch(setLoading(false));
 		}
 		navigator.geolocation.getCurrentPosition(success, error);
