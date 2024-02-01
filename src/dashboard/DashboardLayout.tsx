@@ -83,6 +83,11 @@ const Overlay = styled.div<SidebarSectionProps>`
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 50;
 	transition: opacity 0.3s ease;
+
+	/* Hide on larger screens using Tailwind's responsive prefix */
+	@media (min-width: 768px) {
+		display: none;
+	}
 `;
 
 const MainContent = styled.div`
