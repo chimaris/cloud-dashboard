@@ -7,6 +7,7 @@ export const validateName = (name: string) => {
 export const validatePhoneNumber = (phoneNumber: string) => {
 	const regex = /^\+?\d{0,13}$/;
 	if (!phoneNumber) return "Phone number is required";
+
 	// Remove leading + if present for length validation
 	const numericPart = phoneNumber.replace(/^\+/, "");
 	if (!regex.test(phoneNumber)) return "Invalid phone number";
@@ -25,7 +26,6 @@ export const validateEmail = (email: string) => {
 export const validateAddresses = (addresses: string[]) => {
 	return addresses.map((address) => {
 		if (!address) return "Address is required";
-		// Add any other address validations here
 		return "";
 	});
 };

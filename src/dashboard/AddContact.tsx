@@ -1,12 +1,15 @@
 import { FormEvent, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { contactAdded } from "../store/slices/contactSlice";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { validateAddresses, validateEmail, validateLocation, validateName, validatePhoneNumber } from "../utils/validations";
+import { RootState } from "../store/store";
+import { setLoading } from "../store/slices/contactSlice";
+
+import { BeatLoader } from "react-spinners";
+// import { getCoordinates } from "../services/api";
 
 const maxAddresses = 5; // Maximum number of addresses
-const apiKey = import.meta.env.VITE_APP_GOOGLE_API_KEY as string;
 interface ContactErrors {
 	name: string;
 	phoneNumber: string;
@@ -33,10 +36,14 @@ const AddContact = () => {
 	});
 
 	const dispatch = useDispatch();
+	const isLoading = useSelector((state: RootState) => state.contacts.isLoading);
 
 	const fetchGeolocation = () => {
+		dispatch(setLoading(true));
+
 		if (!navigator.geolocation) {
 			toast.error("Geolocation is not supported by your browser");
+			dispatch(setLoading(false));
 			return;
 		}
 		function success(position: Record<string, any>) {
@@ -48,9 +55,13 @@ const AddContact = () => {
 				longitude,
 				latitude,
 			}));
+
+			toast.success("Longitude and latitude retrieved successfully");
+			dispatch(setLoading(false));
 		}
 		function error() {
 			toast.error("Unable to retrieve your location");
+			dispatch(setLoading(false));
 		}
 		navigator.geolocation.getCurrentPosition(success, error);
 	};
@@ -58,6 +69,20 @@ const AddContact = () => {
 	useEffect(() => {
 		fetchGeolocation();
 	}, []);
+
+	// Get coordinates of the first address
+	// const getContactLocations = async (addresses: string) => {
+	// 	const res = await getCoordinates(addresses);
+	// 	if (res) {
+	// 		setContact((prevContact) => ({
+	// 			...prevContact,
+	// 			longitude: res.longitude,
+	// 			latitude: res.latitude,
+	// 		}));
+	// 	} else {
+	// 		toast.error("Failed to get coordinates");
+	// 	}
+	// };
 
 	// Handle input change
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,38 +110,6 @@ const AddContact = () => {
 		const updatedAddresses = [...contact.addresses];
 		updatedAddresses.splice(index, 1);
 		setContact({ ...contact, addresses: updatedAddresses });
-	};
-
-	// Get coordinates from Google Maps API
-	const getCoordinates = async (address: string) => {
-		try {
-			console.log("loading....");
-			console.log("Api KEY", apiKey);
-
-			const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
-
-			const response = await axios.get(apiUrl);
-			const data = response.data;
-
-			if (data.status === "OK") {
-				const latitude = data.results[0].geometry.location.lat;
-				const longitude = data.results[0].geometry.location.lng;
-				setContact((prevContact) => ({
-					...prevContact,
-					longitude,
-					latitude,
-				}));
-				return { latitude, longitude };
-			} else {
-				console.log("Error....");
-
-				throw new Error(data.status);
-			}
-		} catch (error) {
-			toast.error("Something happened, couldn't get coordinates");
-			console.error("Error fetching coordinates:", error);
-			return null;
-		}
 	};
 
 	const handleSubmit = (e: FormEvent) => {
@@ -255,8 +248,12 @@ const AddContact = () => {
 						<input className="border py-2 px-3 text-grey-800" type="text" name="latitude" id="latitude" value={contact.latitude} readOnly />
 					</div>
 					<div className="">
-						<button type="button" className="bg-[#52C0C0] text-white p-2 mt-4" onClick={() => getCoordinates(contact.addresses[0])}>
-							Get lat & long
+						<button type="button" className="bg-[#52C0C0] text-white p-2 mt-4" onClick={fetchGeolocation}>
+							{isLoading ? (
+								<BeatLoader color="#fff" loading={isLoading} size={10} aria-label="Loading Spinner" data-testid="loader" />
+							) : (
+								"Get lat & long"
+							)}
 						</button>
 					</div>
 					<p className="text-red-500 text-sm">{errors?.location}</p>

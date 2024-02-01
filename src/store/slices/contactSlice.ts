@@ -13,29 +13,31 @@ export interface IContact {
 
 interface ContactsState {
 	contacts: IContact[];
+	isLoading: boolean;
 }
 
 const initialState: ContactsState = {
 	contacts: [
 		{
-			addresses: ["23 Main Str. Awka, Anambra", "Another Address", "New Address"],
-			email: "ray@gmail.com",
 			id: "1",
-			latitude: 30.8472,
-			longitude: 5.9746,
 			name: "Ray Allen",
 			phoneNumber: "090374838493",
+			email: "ray@gmail.com",
+			latitude: 30.8472,
+			longitude: 5.9746,
+			addresses: ["33, Marina Lagos Island", "13, Idugaran Str, Enuowa Lagos"],
 		},
 		{
-			addresses: ["23 Main Str. Awka, Anambra", "Another Address", "New Address"],
-			email: "dami@gmail.com",
 			id: "2",
-			latitude: 30.8472,
-			longitude: 30.9746,
 			name: "Damilola Babalola",
 			phoneNumber: "08123459349",
+			email: "dami@gmail.com",
+			latitude: 30.8472,
+			longitude: 30.9746,
+			addresses: ["10 Bakare Fuko Str, Amukoko", "No.133 Awolowo Road Ikoyi", "No. 1, Marina Raod Epe"],
 		},
 	],
+	isLoading: false,
 };
 
 const contactsSlice = createSlice({
@@ -55,10 +57,13 @@ const contactsSlice = createSlice({
 				};
 			},
 		},
+		setLoading: (state, action: PayloadAction<boolean>) => {
+			state.isLoading = action.payload;
+		},
 	},
 });
 
-export const { contactAdded } = contactsSlice.actions;
+export const { contactAdded, setLoading } = contactsSlice.actions;
 export const selectModalState = (state: RootState) => state.modal;
 
 export default contactsSlice.reducer;

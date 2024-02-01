@@ -24,7 +24,7 @@ const MapActions = ({ contacts }: Props) => {
 	useEffect(() => {
 		if (contacts.length > 0) {
 			const { latitude, longitude } = contacts[0];
-			map.flyTo([latitude, longitude], 4);
+			map.flyTo([latitude, longitude], 2);
 		}
 	}, [contacts, map]);
 
