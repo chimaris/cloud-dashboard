@@ -28,8 +28,6 @@ const SidebarSection = () => {
 
 	return (
 		<>
-			{/* <h3 style={{ paddingLeft: "20px" }}>Cloud Bank</h3> */}
-
 			<img src={logo} alt="logo" />
 
 			<div style={{ padding: "40px 0" }}>

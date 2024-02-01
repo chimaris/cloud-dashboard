@@ -33,7 +33,7 @@ const MapActions = ({ contacts }: Props) => {
 
 const MapView = ({ contacts }: Props) => {
 	return (
-		<MapContainer center={[0, 0]} zoom={2} scrollWheelZoom={false} style={{ height: "400px", width: "100%" }}>
+		<MapContainer center={[0, 0]} zoom={2} scrollWheelZoom={false} style={{ height: "400px", width: "100%", zIndex: 10 }}>
 			<TileLayer
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
