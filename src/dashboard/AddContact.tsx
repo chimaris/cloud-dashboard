@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IContact, contactAdded } from "../store/slices/contactSlice";
+import { contactAdded } from "../store/slices/contactSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { validateAddresses, validateEmail, validateLocation, validateName, validatePhoneNumber } from "../utils/validations";
