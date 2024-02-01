@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 interface ModalState {
@@ -13,11 +13,11 @@ const sidebarSlice = createSlice({
 	name: "sidebar",
 	initialState,
 	reducers: {
-		openModal: (state) => {
-			state.isOpen = true;
+		openModal: (state, action: PayloadAction<boolean>) => {
+			state.isOpen = action.payload;
 		},
-		closeModal: (state) => {
-			state.isOpen = false;
+		closeModal: (state, action: PayloadAction<boolean>) => {
+			state.isOpen = action.payload;
 		},
 		toggle: (state) => {
 			state.isOpen = !state.isOpen;

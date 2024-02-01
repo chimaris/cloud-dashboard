@@ -29,7 +29,6 @@ const SidebarSection = () => {
 	return (
 		<>
 			<img src={logo} alt="logo" />
-
 			<div style={{ padding: "40px 0" }}>
 				{sidebarNav.map((nav, i) => (
 					<StyledNavLink to={nav.link} key={i} style={({ isActive }) => ({ color: isActive ? "#52C0C0" : "" })} onClick={() => dispatch(toggle())}>

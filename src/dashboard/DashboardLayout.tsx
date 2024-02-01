@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectModalState } from "../store/slices/sidebarSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { closeModal, selectModalState } from "../store/slices/sidebarSlice";
 import { SidebarSection, Nav, Main, AddContact } from "./index";
 
 interface SidebarSectionProps {
@@ -9,10 +9,17 @@ interface SidebarSectionProps {
 }
 
 const AdminDashboard = () => {
+	const dispatch = useDispatch();
 	const { isOpen } = useSelector(selectModalState);
+
+	const closeSidebar = () => {
+		dispatch(closeModal(false));
+	};
 
 	return (
 		<DashboardContainer>
+			{isOpen && <Overlay $isOpen={isOpen} onClick={closeSidebar} />}
+
 			<ContentContainer>
 				<Sidebar $isOpen={isOpen}>
 					<SidebarSection />
@@ -64,6 +71,18 @@ const Sidebar = styled.div<SidebarSectionProps>`
 		background-color: #fff;
 		color: white;
 	}
+`;
+
+const Overlay = styled.div<SidebarSectionProps>`
+	display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+	position: fixed;
+	top: 60px;
+	left: 0;
+	height: calc(100vh - 60px);
+	width: 100vw;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 50;
+	transition: opacity 0.3s ease;
 `;
 
 const MainContent = styled.div`
