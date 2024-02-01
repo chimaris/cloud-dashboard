@@ -3,10 +3,17 @@ import { useDispatch } from "react-redux";
 import { IContact, contactAdded } from "../store/slices/contactSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { validateAddresses, validateEmail, validateName, validatePhoneNumber } from "../utils/validations";
+import { validateAddresses, validateEmail, validateLocation, validateName, validatePhoneNumber } from "../utils/validations";
 
 const maxAddresses = 5; // Maximum number of addresses
 const apiKey = import.meta.env.VITE_APP_GOOGLE_API_KEY as string;
+interface ContactErrors {
+	name: string;
+	phoneNumber: string;
+	email: string;
+	addresses: string[];
+	location: string;
+}
 
 const AddContact = () => {
 	const [contact, setContact] = useState({
@@ -17,13 +24,12 @@ const AddContact = () => {
 		longitude: 0.0,
 		latitude: 0.0,
 	});
-	const [errors, setErrors] = useState<IContact>({
+	const [errors, setErrors] = useState<ContactErrors>({
 		name: "",
 		phoneNumber: "",
 		email: "",
 		addresses: [],
-		latitude: 0.0,
-		longitude: 0.0,
+		location: "",
 	});
 
 	const dispatch = useDispatch();
@@ -120,15 +126,15 @@ const AddContact = () => {
 		const phoneNumberError = validatePhoneNumber(contact.phoneNumber);
 		const emailError = validateEmail(contact.email);
 		const addressesErrors = validateAddresses(contact.addresses);
+		const locationErrors = validateLocation(contact.longitude, contact.latitude);
 
-		if (nameError || phoneNumberError || emailError || addressesErrors.some((err) => err)) {
+		if (nameError || phoneNumberError || emailError || addressesErrors.some((err) => err) || locationErrors) {
 			setErrors({
 				name: nameError,
 				phoneNumber: phoneNumberError,
 				email: emailError,
 				addresses: addressesErrors,
-				latitude: 0.0,
-				longitude: 0.0,
+				location: locationErrors,
 			});
 			return;
 		}
@@ -253,6 +259,7 @@ const AddContact = () => {
 							Get lat & long
 						</button>
 					</div>
+					<p className="text-red-500 text-sm">{errors?.location}</p>
 				</div>
 
 				<div className="flex justify-center items-center w-full mt-10">

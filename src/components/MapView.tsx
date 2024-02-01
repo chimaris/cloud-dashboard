@@ -2,16 +2,16 @@ import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { IContact } from "../store/slices/contactSlice";
+import icon from "leaflet/dist/images/marker-icon.png";
+import L from "leaflet";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
-// export interface Contact {
-// 	id?: string;
-// 	name: string;
-// 	phoneNumber: string;
-// 	email: string;
-// 	addresses: string[];
-// 	longitude: number;
-// 	latitude: number;
-// }
+let DefaultIcon = L.icon({
+	iconUrl: icon,
+	shadowUrl: iconShadow,
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 interface Props {
 	contacts: IContact[];
@@ -23,7 +23,7 @@ const MapActions = ({ contacts }: Props) => {
 	useEffect(() => {
 		if (contacts.length > 0) {
 			const { latitude, longitude } = contacts[0];
-			map.flyTo([latitude, longitude], 4);
+			map.flyTo([latitude, longitude], 3);
 		}
 	}, [contacts, map]);
 

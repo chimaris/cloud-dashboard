@@ -29,3 +29,12 @@ export const validateAddresses = (addresses: string[]) => {
 		return "";
 	});
 };
+
+// Validate longitude and latitude
+export const validateLocation = (longitude: number, latitude: number) => {
+	if (!longitude) return "longitude is required";
+	if (!latitude) return "latitude is required";
+	if (longitude < -180 || longitude > 180) return "Invalid longitude";
+	if (latitude < -90 || latitude > 90) return "Invalid latitude";
+	return "";
+};
