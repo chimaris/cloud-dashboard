@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { IContact } from "../store/slices/contactSlice";
-import icon from "leaflet/dist/images/marker-icon.png";
 import L from "leaflet";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import { IContact } from "../store/slices/contactSlice";
 
-let DefaultIcon = L.icon({
-	iconUrl: icon,
-	shadowUrl: iconShadow,
+const customIcon = new L.Icon({
+	iconUrl: "/images/marker-icon.png",
+	iconRetinaUrl: "/images/marker-icon-2x.png",
+	shadowUrl: "/images/marker-shadow.png",
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41],
 });
-
-L.Marker.prototype.options.icon = DefaultIcon;
 
 interface Props {
 	contacts: IContact[];
@@ -23,7 +24,7 @@ const MapActions = ({ contacts }: Props) => {
 	useEffect(() => {
 		if (contacts.length > 0) {
 			const { latitude, longitude } = contacts[0];
-			map.flyTo([latitude, longitude], 3);
+			map.flyTo([latitude, longitude], 4);
 		}
 	}, [contacts, map]);
 
@@ -38,7 +39,7 @@ const MapView = ({ contacts }: Props) => {
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			/>
 			{contacts.map((contact, index) => (
-				<Marker key={index} position={[+contact.latitude, +contact.longitude]}>
+				<Marker key={index} position={[+contact.latitude, +contact.longitude]} icon={customIcon}>
 					<Popup>
 						{contact.name} - {contact.email}
 					</Popup>
