@@ -7,8 +7,8 @@ export interface IContact {
 	phoneNumber: string;
 	email: string;
 	addresses: string[];
-	longitude: string;
-	latitude: string;
+	longitude?: string;
+	latitude?: string;
 }
 
 interface ContactsState {

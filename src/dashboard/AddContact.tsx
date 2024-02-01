@@ -1,8 +1,9 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { contactAdded } from "../store/slices/contactSlice";
+import { IContact, contactAdded } from "../store/slices/contactSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { validateAddresses, validateEmail, validateName, validatePhoneNumber } from "../utils/validations";
 
 const maxAddresses = 5; // Maximum number of addresses
 const apiKey = import.meta.env.VITE_APP_GOOGLE_API_KEY as string;
@@ -13,9 +14,16 @@ const AddContact = () => {
 		phoneNumber: "",
 		email: "",
 		addresses: [""],
-		longitude: "0.0000", // Default value for longitude, not editable
-		latitude: "0.0000", // Default value for latitude, not editable
+		longitude: "0.0000",
+		latitude: "0.0000",
 	});
+	const [errors, setErrors] = useState<IContact>({
+		name: "",
+		phoneNumber: "",
+		email: "",
+		addresses: [],
+	});
+
 	const dispatch = useDispatch();
 
 	const fetchGeolocation = () => {
@@ -44,13 +52,14 @@ const AddContact = () => {
 	}, []);
 
 	// Handle input change
-	const handleInputChange = (e) => {
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
+		setErrors({ ...errors, [name]: "" });
 		setContact({ ...contact, [name]: value });
 	};
 
 	// Handle address change
-	const handleAddressChange = (index, value) => {
+	const handleAddressChange = (index: number, value: string) => {
 		const updatedAddresses = [...contact.addresses];
 		updatedAddresses[index] = value;
 		setContact({ ...contact, addresses: updatedAddresses });
@@ -104,8 +113,32 @@ const AddContact = () => {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
+
+		const nameError = validateName(contact.name);
+		const phoneNumberError = validatePhoneNumber(contact.phoneNumber);
+		const emailError = validateEmail(contact.email);
+		const addressesErrors = validateAddresses(contact.addresses);
+
+		if (nameError || phoneNumberError || emailError || addressesErrors.some((err) => err)) {
+			setErrors({
+				name: nameError,
+				phoneNumber: phoneNumberError,
+				email: emailError,
+				addresses: addressesErrors,
+			});
+			return;
+		}
+
 		dispatch(contactAdded(contact));
 		toast.success("Contact added successfully!");
+		setContact({
+			name: "",
+			phoneNumber: "",
+			email: "",
+			addresses: [""],
+			longitude: "0.0000",
+			latitude: "0.0000",
+		});
 	};
 
 	return (
@@ -126,6 +159,7 @@ const AddContact = () => {
 						onChange={handleInputChange}
 						required
 					/>
+					<p className="text-red-500 text-sm">{errors?.name}</p>
 				</div>
 
 				<div className="grid grid-cols-2 gap-2">
@@ -143,6 +177,7 @@ const AddContact = () => {
 							required
 							pattern="^\+?\d{0,13}"
 						/>
+						<p className="text-red-500 text-sm">{errors?.phoneNumber}</p>
 					</div>
 
 					<div className="flex flex-col mb-4">
@@ -158,6 +193,7 @@ const AddContact = () => {
 							onChange={handleInputChange}
 							required
 						/>
+						<p className="text-red-500 text-sm">{errors?.email}</p>
 					</div>
 				</div>
 
@@ -181,6 +217,7 @@ const AddContact = () => {
 									Remove
 								</button>
 							)}
+							<p className="text-red-500 text-sm">{errors?.addresses}</p>
 						</div>
 					</div>
 				))}
