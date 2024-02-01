@@ -23,7 +23,7 @@ const MapActions = ({ contacts }: Props) => {
 	useEffect(() => {
 		if (contacts.length > 0) {
 			const { latitude, longitude } = contacts[0];
-			map.flyTo([latitude, longitude], 13);
+			map.flyTo([latitude, longitude], 4);
 		}
 	}, [contacts, map]);
 
@@ -38,7 +38,7 @@ const MapView = ({ contacts }: Props) => {
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 			/>
 			{contacts.map((contact, index) => (
-				<Marker key={index} position={[contact.latitude, contact.longitude]}>
+				<Marker key={index} position={[+contact.latitude, +contact.longitude]}>
 					<Popup>
 						{contact.name} - {contact.email}
 					</Popup>
